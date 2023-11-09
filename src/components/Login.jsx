@@ -1,15 +1,49 @@
 import { useState } from "react";
 
-function Login() {
-  const [fName, setFName] = useState("");
-  const writeFName = (event) => {
-    setFName(event.target.value);
-  };
 
-  const [lName, setLName] = useState("");
-  const writeLName = (event) => {
-    setLName(event.target.value);
-  };
+
+
+function Login() {
+  const [fullName, setFName] = useState({
+    fName: '',
+    lName: ''
+
+  });
+
+  function handleChange(event) { 
+    const newValue = event.target.value;
+    const newName = event.target.name;
+
+    setFName(prevValue =>
+    {
+        if (newName === "fName") {
+            return{
+                fName : newValue,
+                lName : prevValue.lName
+            }
+        }else if (newName === "lName") {
+            return{
+                fName : prevValue.fName,
+                lName : newValue
+            }
+
+        }
+    }
+    )
+
+
+
+    if (newName === "fName"){
+        setFName({fName : newValue})
+    } else if (newName === "lName") {
+        setFName({lName : newValue})
+    }
+
+    console.log(newValue)
+    console.log(newName)
+  }
+
+  
   const nameClack = (event) => { event.preventDefault();
   };
 
@@ -19,20 +53,23 @@ function Login() {
 
   return (
     <div>
-      <h1>Hello { fName } { lName } </h1>
+      <h1>Hello { fullName.fName } { fullName.lName } </h1>
       <form onSubmit={nameClack}>
+
         <input
+        name="fName"
           type="text"
-          placeholder="First name"
-          value={fName}
-          onChange={writeFName}
+          placeholder="First name"  
+          onChange={handleChange}
+          value={fullName.fName}
         />
 
         <input
+        name="lName"
           type="text"
           placeholder="Last name"
-          value={lName}
-          onChange={writeLName}
+          onChange={handleChange}
+          value={fullName.lName}
         />
 
         <button
